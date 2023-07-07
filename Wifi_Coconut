@@ -1,0 +1,9 @@
+Command line for wifi coconut to prefilter for ESSID and EAPOL Handshakes. the ESSID beacons are super noisy and generate a really disproportionate amount of volume within the pcap. But vs the noise of collecting EVERYTHING, it's really minimal. Obviously the EAPOL handshakes are almost exclusively high value data.
+
+wifi_coconut --no-display --pcap=- | tcpdump -r - -w coconut.out '(ether proto 0x888e) or (type mgt subtype beacon)'
+
+This can be ingested directly by aircrack-ng WHILE it's being captured.
+
+aircrack-ng -w /usr/share/wordlists/rockyou.txt coconut.out
+
+If there are no handshakes for SSIDs that you want to crack in that initial aricrack run, select an SSID you don't care about and aircrack will exit. if you try to ctrl-c on the essid selection screen, aircrack will hang for no obvious reason.
